@@ -9,26 +9,29 @@ var Person = Backbone.Model.extend({
 });
 
 var PersonView = Backbone.View.extend({
-	tagName: 'li', 
+	tagName: 'li',	
 
-	//template: _template("{{ name }}")
-	template: _.template("<strong><%= name %></strong> (<%= age %>) - <%= occupation %>"),
-	
+	template: '#personTemplate', // need to chane render function
 
-	// similar to constructor, it will automatically run
+	//template: _.template( $('#personTemplate').html() ),
+
 	initialize: function() {
 		this.render();
 	},
 
 	render: function() {
+		var template = _.template( $(this.template) );
+		this.$el.html(template);
 
-		// anti-patter
-		this.$el.html( this.template(this.model.toJSON()) );
+		//this.$el.html( this.template(this.model.toJSON()) );
 	}
 })
 
 var person = new Person;
 var personView = new PersonView({ model: person });
+
+var person2 = new Person({ name: 'Jeffrey Way', age: 27 });
+var personView2 = new PersonView({ model: person });
 
 
 /***************** Test in Console chrome developer tool ***********
@@ -45,5 +48,8 @@ personView.el;
 
 personView.el;
 $(document.body).html(personView.el);
+
+personView2.el;
+$(document.body).html(personView2.el);
 
 */
