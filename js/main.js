@@ -17,14 +17,38 @@ var PeopleCollection = Backbone.Collection.extend({
 	model: Person
 })
 
+//View for all peopel
+var PeopleView = Backbone.View.extend({
+	tagName: 'ul',
+
+	//initialize: function() {
+	//	console.log(this.collection);
+	//},
+
+	render: function() {
+
+		// filter through all items in a collection
+		// underscore is baked in backbone with methods like _.each  _.forEach 
+			console.log(this.collection);
+
+		//this.collection.each( function(model) {
+		//this.collection.forEach( function(person) {
+			// for each, create a new PersonView
+			//var personView = new PersonView({ model: person });
+
+			//console.log(personView);
+		//});
+
+		// for each, create a new PersonView
+		// append to root element
+	}
+})
+
 // The View for a Person
 var PersonView = Backbone.View.extend({
 	tagName: 'li',
 
-	//template: _.template( $('#personTemplate').html() ),
-
-	template: '#personTemplate', // need to change render function
-	
+	template: _.template( $('#personTemplate').html() ),	
 
 	// similar to constructor, it will automatically run
 	initialize: function() {
@@ -32,37 +56,33 @@ var PersonView = Backbone.View.extend({
 	},
 
 	render: function() {
-
-		// The first argument for _.template is supposed to be a string, not a jQuery object
-		var template = _.template( $(this.template.html()) );
-		this.$el.html(template);
-
-		//this.$el.html( this.template(this.model.toJSON()) );
+		this.$el.html( this.template(this.model.toJSON()) );
 	}
 })
 
 var person = new Person;
 
 var peopleCollection = new PeopleCollection([
-{
-	firstName: 'Jeffrey',
-	lastName: 'Way',
-	age: 27
-},
-{
-	firstName: 'John',
-	lastName: 'Doe',
-	age: 50,
-	occupation: 'web designer'
-},
-{
-	firstName: 'Sally',
-	lastName: 'Doe',
-	age: 29,
-	occupation: 'graphic designer'
-}
+	{
+		firstName: 'Jeffrey',
+		lastName: 'Way',
+		age: 27
+	},
+	{
+		firstName: 'John',
+		lastName: 'Doe',
+		age: 50,
+		occupation: 'web designer'
+	},
+	{
+		firstName: 'Sally',
+		lastName: 'Doe',
+		age: 29,
+		occupation: 'graphic designer'
+	}
 ])
 
+var peopleView = new PeopleView({ colloection: peopleCollection });
 
 //var person = new Person;
 //var personView = new PersonView({ model: person });
