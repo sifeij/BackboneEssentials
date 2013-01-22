@@ -9,20 +9,21 @@ var Person = Backbone.Model.extend({
 });
 
 var PersonView = Backbone.View.extend({
-	tagName: 'li', 			//change div tag to li tag
-	className: 'person',	//append class to the tag
-	id: 'some-person',		//append id inside the tag
+	tagName: 'li', 
+
+	//template: _template("{{ name }}")
+	template: _.template("<strong><%= name %></strong> (<%= age %>) - <%= occupation %>"),
+	
 
 	// similar to constructor, it will automatically run
 	initialize: function() {
-		//console.log(this.model);
 		this.render();
 	},
 
 	render: function() {
-		this.$el.html( this.model.get('name') 
-			+ ' (' + this.model.get('age') + ') - '  
-			+ this.model.get('occupation') );
+
+		// anti-patter
+		this.$el.html( this.template(this.model.toJSON()) );
 	}
 })
 
