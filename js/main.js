@@ -29,18 +29,26 @@ var PeopleView = Backbone.View.extend({
 
 		// filter through all items in a collection
 		// underscore is baked in backbone with methods like _.each  _.forEach 
-			console.log(this.collection);
+		//console.log(this.collection);
+		//console.log(this);
 
 		//this.collection.each( function(model) {
-		//this.collection.forEach( function(person) {
-			// for each, create a new PersonView
-			//var personView = new PersonView({ model: person });
+		this.collection.each( function(person) {
+			var personView = new PersonView({ model: person });
 
 			//console.log(personView);
-		//});
+			//console.log(personView.el);
 
-		// for each, create a new PersonView
-		// append to root element
+			// append to root element
+			//console.log(this);
+			//personView.render();
+			//this.$el.append(personView.el)
+
+			this.$el.append(personView.render().el); // make sure render method has return this to use this code to chain them together
+
+		}, this);
+
+		return this;
 	}
 })
 
@@ -48,19 +56,13 @@ var PeopleView = Backbone.View.extend({
 var PersonView = Backbone.View.extend({
 	tagName: 'li',
 
-	template: _.template( $('#personTemplate').html() ),	
-
-	// similar to constructor, it will automatically run
-	initialize: function() {
-		this.render();
-	},
+	template: _.template( $('#personTemplate').html() ),
 
 	render: function() {
 		this.$el.html( this.template(this.model.toJSON()) );
+		return this; // best practice, general rule of thumb, always return this.
 	}
 })
-
-var person = new Person;
 
 var peopleCollection = new PeopleCollection([
 	{
@@ -84,41 +86,11 @@ var peopleCollection = new PeopleCollection([
 
 var peopleView = new PeopleView({ colloection: peopleCollection });
 
-//var person = new Person;
-//var personView = new PersonView({ model: person });
-
-//var person2 = new Person({ name: 'Jeffrey Way', age: 27 });
-//var personView2 = new PersonView({ model: person });
-
-//var peopleCollection = new PeopleCollection;
-//peopleCollection.add(person);
-
-//var peopleCollection = new PeopleCollection;
-//peopleCollection.add(person2);
-
-console.log(peopleCollection);
-
+$(document.body).append(peopleView.render().el);
 
 /***************** Test in Console chrome developer tool ***********
 
-PersonView
-
-var personView = new PersonView;
-
-personView.el    //<div></div>
-personView.$el   //[<div></div>]
-
-personView.render();
-personView.el;
-
-personView.el;
-$(document.body).html(personView.el);
-
-var model = peopleCollection.at(0);
-model
-model.get('name');
-model.set('occupation', 'web developer');
-model.toJSON();
-peopleCollection.toJSON();
+peopleView.render();
+peopleView.el;
 
 */
