@@ -1,3 +1,19 @@
+// As rule of thumb, you want limit your globals to one or two
+// in this case, template will be a global variable
+// or you can wrap everything in a self evoking function
+//(function() {
+//	
+//})();
+
+//var template = function(id) {
+//	return $('#' + id).html();
+//};
+
+// Automatically compile it
+var template = function(id) {
+	return _.template( $('#' + id).html() );
+};
+
 // Person Model
 var Person = Backbone.Model.extend({
 	defaults: {
@@ -30,7 +46,10 @@ var PeopleView = Backbone.View.extend({
 var PersonView = Backbone.View.extend({
 	tagName: 'li',
 
-	template: _.template( $('#personTemplate').html() ),
+	//template: _.template( template(personTemplate) ),
+
+	// Automatically compile it
+	template: template(personTemplate),
 
 	render: function() {
 		this.$el.html( this.template(this.model.toJSON()) );
