@@ -1,79 +1,89 @@
-// As rule of thumb, you want limit your globals to one or two
-// in this case, template will be a global variable
-// or you can wrap everything in a self evoking function
-//(function() {
-//	
-//})();
+(function() {
+	window.App = {
+		Models: {},
+		Collections: {},
+		Views: {}
+	};
 
-//var template = function(id) {
-//	return $('#' + id).html();
-//};
+	window.template = function(id) {
+		return _.template( $('#' + id).html() );
+	};
 
-// Automatically compile it
-var template = function(id) {
-	return _.template( $('#' + id).html() );
-};
+	//App.Person = Backbone.Model.extend({});
+	//App.PersonView = Backbone.View.extend({});
+	//App.PeopleCollection = Backbone.Collection.extend({});
 
-// Person Model
-var Person = Backbone.Model.extend({
-	defaults: {
-		name: 'John Doe',
-		age: 30,
-		occupation: 'worker'
-	}
-});
+	//App.Models.Person = Backbone.Model.extend({});
+	//App.Views.Person = Backbone.View.extend({});
+	//App.Collections.People = Backbone.Collection.extend({});
 
-// A List of People
-var PeopleCollection = Backbone.Collection.extend({
-	model: Person
-})
+	//Person = Backbone.Model.extend({});
+	//PersonView = Backbone.View.extend({});
+	//People = Backbone.Collection.extend({});
 
-//View for all people
-var PeopleView = Backbone.View.extend({
-	tagName: 'ul',
+	//var person = new App.Person();
 
-	render: function() {
-		this.collection.each( function(person) {
-			var personView = new PersonView({ model: person });
-			this.$el.append(personView.render().el);
-		}, this);
+	// Person Model
+	App.Models.Person = Backbone.Model.extend({
+		defaults: {
+			name: 'John Doe',
+			age: 30,
+			occupation: 'worker'
+		}
+	});
 
-		return this;
-	}
-})
+	// A List of People
+	App.Collections.People = Backbone.Collection.extend({
+		model: App.Models.Person
+	});
 
-// The View for a Person
-var PersonView = Backbone.View.extend({
-	tagName: 'li',
+	//View for all people
+	App.Views.People = Backbone.View.extend({
+		tagName: 'ul',
 
-	//template: _.template( template(personTemplate) ),
+		render: function() {
+			this.collection.each( function(person) {
+				var personView = new App.Views.Person({ model: person });
+				this.$el.append(personView.render().el);
+			}, this);
 
-	// Automatically compile it
-	template: template(personTemplate),
+			return this;
+		}
+	});
 
-	render: function() {
-		this.$el.html( this.template(this.model.toJSON()) );
-		return this;
-	}
-})
+	// The View for a Person
+	App.Views.Person = Backbone.View.extend({
+		tagName: 'li',
 
-var peopleCollection = new PeopleCollection([
-	{
-		name: 'Jeffrey Way',
-		age: 27
-	},
-	{
-		name: 'John Doe',
-		age: 50,
-		occupation: 'web designer'
-	},
-	{
-		name: 'Sally Doe',
-		age: 29,
-		occupation: 'graphic designer'
-	}
-])
+		template: template('personTemplate'),
 
-var peopleView = new PeopleView({ colloection: peopleCollection });
+		render: function() {
+			this.$el.html( this.template(this.model.toJSON()) );
+			return this;
+		}
+	});
 
-$(document.body).append(peopleView.render().el);
+	peopleCollection = new App.Collections.People([
+		{
+			name: 'Jeffrey Way',
+			age: 27
+		},
+		{
+			name: 'John Doe',
+			age: 50,
+			occupation: 'web designer'
+		},
+		{
+			name: 'Sally Doe',
+			age: 29,
+			occupation: 'graphic designer'
+		}
+	]);
+
+	var peopleView = new App.Views.People({ colloection: peopleCollection });
+
+	$(document.body).append(peopleView.render().el);
+
+	console.log(App.Collections);
+	
+})();
