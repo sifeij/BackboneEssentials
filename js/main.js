@@ -80,7 +80,7 @@
 		}
 	]);
 
-	var peopleView = new App.Views.People({ colloection: peopleCollection });
+	var peopleView = new App.Views.People({ collection: peopleCollection });
 
 	$(document.body).append(peopleView.render().el);
 
